@@ -36,6 +36,7 @@ namespace ChessFromScratch
     {
         public enum Piece
         {
+            Nothing,
             W_King,
             W_Queen,
             W_Rook,
@@ -47,8 +48,7 @@ namespace ChessFromScratch
             B_Rook,
             B_Bishop,
             B_Knight,
-            B_Pawn,
-            Nothing
+            B_Pawn
         };
 
         public static readonly Dictionary<Point, Piece> Defboard = new Dictionary<Point, Piece>()
