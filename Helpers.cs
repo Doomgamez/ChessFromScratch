@@ -10,16 +10,17 @@ namespace ChessFromScratch
 {
     public class Helpers
     {
-        public static Game_t.PlayerColor WhatPlayerColorIsPiece(Piece piece)
+        public static Game_t.PlayerColor? WhatPlayerColorIsPiece(Piece piece)
         {
             if (Enum.GetName(typeof(Piece), piece).Contains("W_"))
             {
                 return Game_t.PlayerColor.White;
             }
-            else
+            else if (Enum.GetName(typeof(Piece), piece).Contains("B_"))
             {
                 return Game_t.PlayerColor.Black;
             }
+            return null;
         }
 
         public static Piece GetPieceByCell(Point point)
