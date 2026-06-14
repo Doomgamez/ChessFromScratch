@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.leave = new System.Windows.Forms.Button();
             this.manual = new System.Windows.Forms.Button();
+            this.KeyInput = new System.Windows.Forms.Timer(this.components);
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +77,12 @@
             this.manual.UseVisualStyleBackColor = true;
             this.manual.Click += new System.EventHandler(this.manual_Click);
             // 
+            // KeyInput
+            // 
+            this.KeyInput.Enabled = true;
+            this.KeyInput.Interval = 50;
+            this.KeyInput.Tick += new System.EventHandler(this.KeyInput_Tick);
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -98,6 +106,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button manual;
         private System.Windows.Forms.Button leave;
+        private System.Windows.Forms.Timer KeyInput;
     }
 }
 

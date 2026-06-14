@@ -155,5 +155,7 @@ namespace ChessFromScratch
         public Game_t.PlayerColor playerColor { get; set; }
         public string ipv6 { get; set; } = string.Empty;
         public Game_t.PlayerColor CurrentTurn { get; set; } = Game_t.PlayerColor.White;
+        public (Point, Board.Piece) CurrentSelectedPiece { get; set; }
+        public List<Point> potentialmoves { get; set; } = new List<Point>();
     }
 }

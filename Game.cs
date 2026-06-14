@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,6 +17,9 @@ namespace ChessFromScratch
 {
     public partial class Game : Form
     {
+        [DllImport("user32.dll")]
+        public static extern short GetAsyncKeyState(int vKey);
+
         Data gamedata;
         private Bitmap bgimgcache;
         private Bitmap boardcache;
@@ -26,6 +30,9 @@ namespace ChessFromScratch
 
         public Game(Data gamestruct)
         {
+            chessTip.InitialDelay = 0;
+            chessTip.ReshowDelay = 50;
+            chessTip.AutoPopDelay = 200;
             gamedata = gamestruct;
             InitializeComponent();
             DoubleBuffered = true;
@@ -72,6 +79,161 @@ namespace ChessFromScratch
                     panel1.Width,
                     y);
             }
+        }
+
+        void RenderPotentialMove(Graphics g)
+        {
+            using (Brush b = new SolidBrush(
+                Color.FromArgb(128, Color.Lime)))
+            {
+                foreach (Point move in gamedata.potentialmoves)
+                {
+                    int x = (move.X - 1) * 100;
+                    int y = (move.Y - 1) * 100;
+
+                    g.FillEllipse(
+                        b,
+                        x + 25,
+                        y + 25,
+                        50,
+                        50);
+                }
+            }
+        }
+
+        void ShowPotentialMoves()
+        {
+            Piece value;
+            gamedata.potentialmoves.Clear();
+            Point position = gamedata.CurrentSelectedPiece.Item1;
+            Piece piece = gamedata.CurrentSelectedPiece.Item2;
+            switch (piece)
+            {
+                case Piece.W_King:
+                    break;
+                case Piece.W_Queen:
+                    break;
+                case Piece.W_Rook:
+                    break;
+                case Piece.W_Bishop:
+                    break;
+                case Piece.W_Knight:
+                    break;
+                case Piece.W_Pawn:
+                    {
+                        if (position.Y == 7)
+                        {
+                            if (Helpers.GetPieceByCell(new Point(position.X, 5)) == default)
+                            {
+                                gamedata.potentialmoves.Add(new Point(gamedata.CurrentSelectedPiece.Item1.X, 5));
+                            }
+                            //todo add el pasante
+                        }
+                        if (Helpers.GetPieceByCell(new Point(position.X, position.Y - 1)) == default)
+                        {
+                            gamedata.potentialmoves.Add(new Point(position.X, position.Y - 1));
+                        }
+
+                        value = Helpers.GetPieceByCell(new Point(position.X - 1, position.Y - 1));
+                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
+                        {
+                            gamedata.potentialmoves.Add(new Point(position.X - 1, position.Y - 1));
+                        }
+
+                        value = Helpers.GetPieceByCell(new Point(position.X + 1, position.Y - 1));
+                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
+                        {
+                            gamedata.potentialmoves.Add(new Point(position.X + 1, position.Y - 1));
+                        }
+                    }
+                    break;
+                case Piece.B_King:
+                    break;
+                case Piece.B_Queen:
+                    break;
+                case Piece.B_Rook:
+                    break;
+                case Piece.B_Bishop:
+                    break;
+                case Piece.B_Knight:
+                    break;
+                case Piece.B_Pawn:
+                    {
+                        if (position.Y == 7)
+                        {
+                            if (Helpers.GetPieceByCell(new Point(position.X,5)) == default)
+                            {
+                                gamedata.potentialmoves.Add(new Point(gamedata.CurrentSelectedPiece.Item1.X, 5));
+                            }
+                            //todo add el pasante
+                        }
+                        if (Helpers.GetPieceByCell(new Point(position.X, position.Y - 1)) == default)
+                        {
+                            gamedata.potentialmoves.Add(new Point(position.X, position.Y - 1));
+                        }
+
+                        value = Helpers.GetPieceByCell(new Point(position.X - 1, position.Y - 1));
+                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+                        {
+                            gamedata.potentialmoves.Add(new Point(position.X - 1, position.Y - 1));
+                        }
+
+                        value = Helpers.GetPieceByCell(new Point(position.X + 1, position.Y - 1));
+                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+                        {
+                            gamedata.potentialmoves.Add(new Point(position.X + 1, position.Y - 1));
+                        }
+                    }
+                    break;
+                case Piece.Nothing:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void PotentialMoveClicked(Point target)
+        {
+            if (!gamedata.potentialmoves.Contains(target))
+                return;
+
+            Point from = gamedata.CurrentSelectedPiece.Item1;
+            Piece piece = gamedata.CurrentSelectedPiece.Item2;
+
+            Board.Instance.board.Remove(from);
+
+            Board.Instance.board[target] = piece;
+
+            gamedata.CurrentSelectedPiece = default;
+            gamedata.potentialmoves.Clear();
+
+            boardcache?.Dispose();
+            boardcache = null;
+
+            panel1.Invalidate();
+        }
+
+        void SelectPieceToMove(Point p)
+        {
+            if (!Board.Instance.board.TryGetValue(p, out Piece value))
+            {
+                return;
+            }
+            if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+            {
+                gamedata.CurrentSelectedPiece = (p, value);
+            }
+            else
+            {
+                gamedata.CurrentSelectedPiece = (p, value);
+            }
+
+            ShowPotentialMoves();
+
+            panel1.Invalidate();
+            boardcache = null;
+            Console.WriteLine(gamedata.CurrentSelectedPiece);
+            return;
         }
 
         void RenderTooltip(Point loc)
@@ -208,6 +370,7 @@ namespace ChessFromScratch
 
                     DrawLayout(g);
                     RenderBoard(g);
+                    RenderPotentialMove(g);
                 }
             }
 
@@ -306,7 +469,31 @@ namespace ChessFromScratch
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button != MouseButtons.Left)
+                return;
 
+            Point clicked = new Point(
+                e.X / 100 + 1,
+                e.Y / 100 + 1);
+
+            if (gamedata.CurrentSelectedPiece != default &&
+                gamedata.potentialmoves.Contains(clicked))
+            {
+                PotentialMoveClicked(clicked);
+                return;
+            }
+
+            SelectPieceToMove(clicked);
+        }
+
+        private void KeyInput_Tick(object sender, EventArgs e)
+        {
+            if ((GetAsyncKeyState((int)Keys.Escape) & 0x8000) != 0)
+            {
+                gamedata.CurrentSelectedPiece = default;
+                panel1.Invalidate();
+                boardcache = null;
+            }
         }
     }
 }
