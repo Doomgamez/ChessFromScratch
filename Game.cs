@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,11 +15,11 @@ namespace ChessFromScratch
 {
     public partial class Game : Form
     {
-        Structs gamedata;
+        Data gamedata;
         private Bitmap bgimgcache;
         private Bitmap boardcache;
 
-        public Game(Structs gamestruct)
+        public Game(Data gamestruct)
         {
             gamedata = gamestruct;
             InitializeComponent();
@@ -112,5 +115,37 @@ namespace ChessFromScratch
                 0);
         }
 
+        private void leave_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form is Play)
+                {
+                    form.Show();
+                    form.Activate();
+                    break;
+                }
+            }
+        }
+
+        private void manual_Click(object sender, EventArgs e)
+        {
+            string tmp = Path.Combine(Path.GetTempPath(), "manual-ChessFromScratch.txt");
+
+            if (!File.Exists(tmp))
+            {
+                using (Stream res = Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream("ChessFromScratch.emb.manual.txt"))
+                {
+                    using (FileStream file = File.Create(tmp))
+                    {
+                        res.CopyTo(file);
+                    }
+                }
+            }
+
+            Process.Start("notepad.exe", tmp);
+        }
     }
 }

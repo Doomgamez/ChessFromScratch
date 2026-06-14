@@ -41,8 +41,8 @@ namespace ChessFromScratch
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Structs structs = new Structs();
-            structs.matchtype = matchtype.Bot;
+            Data structs = new Data();
+            structs.matchtype = Game_t.matchtype.Bot;
             structs.ipv6 = string.Empty;
             Game game = new Game(structs);
             this.Hide();
@@ -58,17 +58,17 @@ namespace ChessFromScratch
 
             if (box.ShowDialog() == DialogResult.OK)
             {
-                Structs structs = new Structs();
+                Data structs = new Data();
 
-                structs.matchtype = matchtype.Multiplayer;
+                structs.matchtype = Game_t.matchtype.Multiplayer;
                 if (box.input == string.Empty)
                 {
-                    structs.hostType = HostType.Host;
+                    structs.hostType = Game_t.HostType.Host;
                 }else
                 {
                     if (IPAddress.TryParse(box.input, out IPAddress address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                     {
-                        structs.hostType = HostType.Client;
+                        structs.hostType = Game_t.HostType.Client;
                     }
                     else
                     {
@@ -80,7 +80,7 @@ namespace ChessFromScratch
 
                 Game game = new Game(structs);
 
-                Hide();
+                this.Hide();
                 game.Show();
             }
         }
@@ -88,6 +88,11 @@ namespace ChessFromScratch
         private void button3_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            Client.HideMyIp = checkBox2.Checked;
         }
     }
 }

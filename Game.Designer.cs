@@ -30,6 +30,9 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.leave = new System.Windows.Forms.Button();
+            this.manual = new System.Windows.Forms.Button();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -42,11 +45,33 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.leave);
+            this.panel2.Controls.Add(this.manual);
             this.panel2.Location = new System.Drawing.Point(800, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 800);
             this.panel2.TabIndex = 1;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // leave
+            // 
+            this.leave.Location = new System.Drawing.Point(49, 712);
+            this.leave.Name = "leave";
+            this.leave.Size = new System.Drawing.Size(110, 35);
+            this.leave.TabIndex = 1;
+            this.leave.Text = "leave";
+            this.leave.UseVisualStyleBackColor = true;
+            this.leave.Click += new System.EventHandler(this.leave_Click);
+            // 
+            // manual
+            // 
+            this.manual.Location = new System.Drawing.Point(49, 753);
+            this.manual.Name = "manual";
+            this.manual.Size = new System.Drawing.Size(110, 35);
+            this.manual.TabIndex = 0;
+            this.manual.Text = "manual";
+            this.manual.UseVisualStyleBackColor = true;
+            this.manual.Click += new System.EventHandler(this.manual_Click);
             // 
             // Game
             // 
@@ -60,6 +85,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -68,6 +94,8 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button manual;
+        private System.Windows.Forms.Button leave;
     }
 }
 

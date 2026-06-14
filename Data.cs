@@ -7,47 +7,51 @@ using System.Threading.Tasks;
 
 namespace ChessFromScratch
 {
-    public enum matchtype
+    public class Game_t
     {
-        Bot,
-        Multiplayer
-    };
-    public enum PlayerColor
-    {
-        White,
-        Black
-    };
-    public enum HostType
-    {
-        Host,
-        Client
-    };
-    public enum GameState
-    {
-        WaitingForOpponent,
-        Playing,
-        GameOver
-    };
-    public enum Piece
-    {
-        W_King,
-        W_Queen,
-        W_Rook,
-        W_Bishop,
-        W_Knight,
-        W_Pawn,
-        B_King,
-        B_Queen,
-        B_Rook,
-        B_Bishop,
-        B_Knight,
-        B_Pawn,
-        Nothing
-    };
+        public enum matchtype
+        {
+            Bot,
+            Multiplayer
+        };
+        public enum PlayerColor
+        {
+            White,
+            Black
+        };
+        public enum HostType
+        {
+            Host,
+            Client
+        };
+        public enum GameState
+        {
+            WaitingForOpponent,
+            Playing,
+            GameOver
+        };
+    }
 
     public class Board
     {
-        public readonly Dictionary<Point, Piece> Defboard = new Dictionary<Point, Piece>()
+        public enum Piece
+        {
+            W_King,
+            W_Queen,
+            W_Rook,
+            W_Bishop,
+            W_Knight,
+            W_Pawn,
+            B_King,
+            B_Queen,
+            B_Rook,
+            B_Bishop,
+            B_Knight,
+            B_Pawn,
+            Nothing
+        };
+
+        public static readonly Dictionary<Point, Piece> Defboard = new Dictionary<Point, Piece>()
         {
             { new Point(1,1), Piece.W_Rook },
             { new Point(2,1), Piece.W_Knight },
@@ -86,7 +90,7 @@ namespace ChessFromScratch
             { new Point(8,8), Piece.B_Rook }
         };
 
-        public Board instance { get; set; }
+        public static Board Instance { get; } = new Board();
 
         public void MovePiece(Piece piece,Point from,Point to)
         {
@@ -95,11 +99,21 @@ namespace ChessFromScratch
         Dictionary<Point, Piece> board = new Dictionary<Point, Piece>();
     }
 
-    public class Structs
+    public static class Client
     {
-        public matchtype matchtype { get; set; }
-        public HostType hostType { get; set; }
-        public PlayerColor playerColor { get; set; }
+        public static bool HideMyIp = false; //client side streamer mode
+
+        public static void LoadMyConfig()
+        {
+            return;
+        }
+    }
+
+    public class Data
+    {
+        public Game_t.matchtype matchtype { get; set; }
+        public Game_t.HostType hostType { get; set; }
+        public Game_t.PlayerColor playerColor { get; set; }
         public string ipv6 { get; set; } = string.Empty;
     }
 }

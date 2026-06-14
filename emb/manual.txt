@@ -1,0 +1,19 @@
+﻿ChessFromScratch - Ipv6 networking and chess AI DEMO
+
+license - https://unlicense.org/
+
+what style of p2p have i used? - host 2 client p2p
+
+how are connections handled connections go through an insecure port (no password is required to join an host) 9999 in this case
+
+connecting to a valid host which a valid host is validated via a specially crafted tcp packet which is send over to the host and then the client trying to connect has to wait for the host to respond
+this is similar to an icmp ping request of sorts the host is only able to handle 1 player at a time the host will ignore any additional connection attempts 
+
+all of this is handled via tcp 
+
+how does the bot work?
+
+the bot is quite simple it learns overtime based on the games that it played the bot tries to evaulate moves and then use the best possible move to win
+its a basic bot it learns and improves over time its dataset is shipped with this example but you can delete it and teach it from scratch
+
+DGZ@shadowdev 2026
