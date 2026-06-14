@@ -14,8 +14,10 @@ namespace ChessFromScratch
 {
     public partial class Play : Form
     {
+        private Random random;
         public Play()
         {
+            random = new Random();
             InitializeComponent();
         }
 
@@ -44,6 +46,7 @@ namespace ChessFromScratch
             Data structs = new Data();
             structs.matchtype = Game_t.matchtype.Bot;
             structs.ipv6 = string.Empty;
+            structs.playerColor = (Game_t.PlayerColor)Enum.GetValues(typeof(Game_t.PlayerColor)).GetValue(random.Next(Enum.GetValues(typeof(Game_t.PlayerColor)).Length)); // https://stackoverflow.com/questions/3132126/how-do-i-select-a-random-value-from-an-enumeration
             Game game = new Game(structs);
             this.Hide();
             game.Show();
@@ -64,11 +67,14 @@ namespace ChessFromScratch
                 if (box.input == string.Empty)
                 {
                     structs.hostType = Game_t.HostType.Host;
-                }else
+                    structs.playerColor = (Game_t.PlayerColor)Enum.GetValues(typeof(Game_t.PlayerColor)).GetValue(random.Next(Enum.GetValues(typeof(Game_t.PlayerColor)).Length));
+                }
+                else
                 {
                     if (IPAddress.TryParse(box.input, out IPAddress address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                     {
                         structs.hostType = Game_t.HostType.Client;
+                        //get playercolor from host
                     }
                     else
                     {
@@ -77,7 +83,7 @@ namespace ChessFromScratch
                     }
                 }
                 structs.ipv6 = box.input;
-
+                
                 Game game = new Game(structs);
 
                 this.Hide();

@@ -105,5 +105,8 @@
   <ItemGroup>
     <EmbeddedResource Include="emb\manual.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="emb\spritesheetchess.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
