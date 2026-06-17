@@ -118,5 +118,8 @@
   <ItemGroup>
     <EmbeddedResource Include="emb\spritesheetchess.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="emb\doomgames.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

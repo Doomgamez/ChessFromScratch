@@ -15,9 +15,13 @@ namespace ChessFromScratch
     public partial class Play : Form
     {
         private Random random;
+        private ToolTip domaintip = new ToolTip();
         public Play()
         {
             random = new Random();
+            domaintip.InitialDelay = 0;
+            domaintip.ReshowDelay = 0;
+            domaintip.AutoPopDelay = 5000;
             InitializeComponent();
         }
 
@@ -33,7 +37,6 @@ namespace ChessFromScratch
                 g.DrawLine(Pens.DarkGray, 0, 0, Width-i, Height);
             }
             g.DrawString("Chess From Scratch", new Font("Arial", 24), Brushes.Black, new PointF(Width / 2 - 150, Height / 2 - 50));
-            g.Dispose();
         }
 
         private void Play_Load(object sender, EventArgs e)
@@ -99,6 +102,16 @@ namespace ChessFromScratch
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             Client.HideMyIp = checkBox2.Checked;
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://doomgames.cc");
+        }
+
+        private void pictureBox1_MouseHover(object sender, EventArgs e)
+        {
+            domaintip.SetToolTip(pictureBox1, "click to open Doomgames.cc");
         }
     }
 }
