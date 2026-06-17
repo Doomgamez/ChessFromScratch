@@ -31,5 +31,10 @@ namespace ChessFromScratch
             }
             return default;
         }
+
+        public static void TryAddPotentialMove(Point position)
+        {
+            Game.gamedata.potentialmoves.Add(position);
+        }
     }
 }

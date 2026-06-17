@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ChessFromScratch.Board;
+using static ChessFromScratch.Helpers;
 
 namespace ChessFromScratch
 {
@@ -20,7 +21,7 @@ namespace ChessFromScratch
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(int vKey);
 
-        Data gamedata;
+        public static Data gamedata;
         private Bitmap bgimgcache;
         private Bitmap boardcache;
 
@@ -50,11 +51,13 @@ namespace ChessFromScratch
 
             if (gamedata.playerColor == Game_t.PlayerColor.Black)
             {
-                Board.Instance.board = Board.Defboard;
+                Instance.board = Defboard;
             }else
             {
-                Board.Instance.board = Board.DefboardWhite;
+                Instance.board = DefboardWhite;
             }
+
+            Console.WriteLine(gamedata.playerColor); // yes it is random just not enough
 
         }
 
@@ -123,27 +126,27 @@ namespace ChessFromScratch
                     {
                         if (position.Y == 7)
                         {
-                            if (Helpers.GetPieceByCell(new Point(position.X, 5)) == default)
+                            if (GetPieceByCell(new Point(position.X, 5)) == default)
                             {
-                                gamedata.potentialmoves.Add(new Point(gamedata.CurrentSelectedPiece.Item1.X, 5));
+                                TryAddPotentialMove(new Point(position.X, 5));
                             }
                             //todo add el pasante
                         }
-                        if (Helpers.GetPieceByCell(new Point(position.X, position.Y - 1)) == default)
+                        if (GetPieceByCell(new Point(position.X, position.Y - 1)) == default)
                         {
-                            gamedata.potentialmoves.Add(new Point(position.X, position.Y - 1));
+                            TryAddPotentialMove(new Point(position.X, position.Y - 1));
                         }
 
-                        value = Helpers.GetPieceByCell(new Point(position.X - 1, position.Y - 1));
-                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
+                        value = GetPieceByCell(new Point(position.X - 1, position.Y - 1));
+                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
                         {
-                            gamedata.potentialmoves.Add(new Point(position.X - 1, position.Y - 1));
+                            TryAddPotentialMove(new Point(position.X - 1, position.Y - 1));
                         }
 
-                        value = Helpers.GetPieceByCell(new Point(position.X + 1, position.Y - 1));
-                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
+                        value = GetPieceByCell(new Point(position.X + 1, position.Y - 1));
+                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
                         {
-                            gamedata.potentialmoves.Add(new Point(position.X + 1, position.Y - 1));
+                            TryAddPotentialMove(new Point(position.X + 1, position.Y - 1));
                         }
                     }
                     break;
@@ -161,27 +164,27 @@ namespace ChessFromScratch
                     {
                         if (position.Y == 7)
                         {
-                            if (Helpers.GetPieceByCell(new Point(position.X,5)) == default)
+                            if (GetPieceByCell(new Point(position.X,5)) == default)
                             {
-                                gamedata.potentialmoves.Add(new Point(gamedata.CurrentSelectedPiece.Item1.X, 5));
+                                TryAddPotentialMove(new Point(position.X, 5));
                             }
                             //todo add el pasante
                         }
-                        if (Helpers.GetPieceByCell(new Point(position.X, position.Y - 1)) == default)
+                        if (GetPieceByCell(new Point(position.X, position.Y - 1)) == default)
                         {
-                            gamedata.potentialmoves.Add(new Point(position.X, position.Y - 1));
+                            TryAddPotentialMove(new Point(position.X, position.Y - 1));
                         }
 
-                        value = Helpers.GetPieceByCell(new Point(position.X - 1, position.Y - 1));
-                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+                        value = GetPieceByCell(new Point(position.X - 1, position.Y - 1));
+                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
                         {
-                            gamedata.potentialmoves.Add(new Point(position.X - 1, position.Y - 1));
+                            TryAddPotentialMove(new Point(position.X - 1, position.Y - 1));
                         }
 
-                        value = Helpers.GetPieceByCell(new Point(position.X + 1, position.Y - 1));
-                        if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+                        value = GetPieceByCell(new Point(position.X + 1, position.Y - 1));
+                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
                         {
-                            gamedata.potentialmoves.Add(new Point(position.X + 1, position.Y - 1));
+                            TryAddPotentialMove(new Point(position.X + 1, position.Y - 1));
                         }
                     }
                     break;
@@ -200,9 +203,9 @@ namespace ChessFromScratch
             Point from = gamedata.CurrentSelectedPiece.Item1;
             Piece piece = gamedata.CurrentSelectedPiece.Item2;
 
-            Board.Instance.board.Remove(from);
+            Instance.board.Remove(from);
 
-            Board.Instance.board[target] = piece;
+            Instance.board[target] = piece;
 
             gamedata.CurrentSelectedPiece = default;
             gamedata.potentialmoves.Clear();
@@ -210,23 +213,29 @@ namespace ChessFromScratch
             boardcache?.Dispose();
             boardcache = null;
 
+            if (piece == Piece.W_Pawn || piece == Piece.B_Pawn)
+            {
+                if (target.Y == 1)
+                {
+                    promotion pr = new promotion();
+                    pr.ShowDialog();
+                }
+            }
+
             panel1.Invalidate();
         }
 
         void SelectPieceToMove(Point p)
         {
-            if (!Board.Instance.board.TryGetValue(p, out Piece value))
+            if (!Instance.board.TryGetValue(p, out Piece value))
             {
                 return;
             }
-            if (Helpers.WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+            if (gamedata.playerColor != WhatPlayerColorIsPiece(value))
             {
-                gamedata.CurrentSelectedPiece = (p, value);
+                return;
             }
-            else
-            {
-                gamedata.CurrentSelectedPiece = (p, value);
-            }
+            gamedata.CurrentSelectedPiece = (p, value);
 
             ShowPotentialMoves();
 
@@ -250,91 +259,91 @@ namespace ChessFromScratch
         {
             switch (piece)
             {
-                case Board.Piece.W_King:
+                case Piece.W_King:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(160, 0, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.W_Queen:
+                case Piece.W_Queen:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(128, 0, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.W_Rook:
+                case Piece.W_Rook:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(32, 0, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.W_Bishop:
+                case Piece.W_Bishop:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(96, 0, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.W_Knight:
+                case Piece.W_Knight:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(64, 0, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.W_Pawn:
+                case Piece.W_Pawn:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(0, 0, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.B_King:
+                case Piece.B_King:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(160, 32, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.B_Queen:
+                case Piece.B_Queen:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(128, 32, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.B_Rook:
+                case Piece.B_Rook:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(32, 32, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.B_Bishop:
+                case Piece.B_Bishop:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(96, 32, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.B_Knight:
+                case Piece.B_Knight:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(64, 32, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.B_Pawn:
+                case Piece.B_Pawn:
                     g.DrawImage(
                     spriteSheet,
                     new Rectangle(point.X * 100, point.Y * 100, 100, 100),
                     new Rectangle(0, 32, 32, 32),
                     GraphicsUnit.Pixel);
                     break;
-                case Board.Piece.Nothing:
+                case Piece.Nothing:
                     break;
                 default:
                     break;
@@ -343,7 +352,7 @@ namespace ChessFromScratch
 
         void RenderBoard(Graphics g)
         {
-            foreach (var item in Board.Instance.board)
+            foreach (var item in Instance.board)
             {
                 DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1));
             }
