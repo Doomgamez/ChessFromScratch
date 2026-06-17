@@ -135,6 +135,20 @@ namespace ChessFromScratch
         {
 
         }
+        public void PromotePiece(Point Cell,Piece PromoteTo)
+        {
+            if (Helpers.GetPieceByCell(Cell) != Piece.W_Pawn && Helpers.GetPieceByCell(Cell) != Piece.B_Pawn)
+            {
+                Environment.Exit(1);
+            }
+            
+            if (Game.gamedata.playerColor != Helpers.WhatPlayerColorIsPiece(PromoteTo))
+            {
+                Environment.Exit(1);
+            }
+
+            board[Cell] = PromoteTo;
+        }
         public Dictionary<Point, Piece> board = new Dictionary<Point, Piece>();
     }
 

@@ -223,7 +223,7 @@ namespace ChessFromScratch
             {
                 if (target.Y == 1)
                 {
-                    promotion pr = new promotion();
+                    promotion pr = new promotion(target);
                     pr.ShowDialog();
                 }
             }
@@ -261,106 +261,11 @@ namespace ChessFromScratch
             return;
         }
 
-        void DrawPiece(Graphics g,Board.Piece piece,Point point)
-        {
-            switch (piece)
-            {
-                case Piece.W_King:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(160, 0, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.W_Queen:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(128, 0, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.W_Rook:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(32, 0, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.W_Bishop:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(96, 0, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.W_Knight:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(64, 0, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.W_Pawn:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(0, 0, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.B_King:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(160, 32, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.B_Queen:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(128, 32, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.B_Rook:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(32, 32, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.B_Bishop:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(96, 32, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.B_Knight:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(64, 32, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.B_Pawn:
-                    g.DrawImage(
-                    spriteSheet,
-                    new Rectangle(point.X * 100, point.Y * 100, 100, 100),
-                    new Rectangle(0, 32, 32, 32),
-                    GraphicsUnit.Pixel);
-                    break;
-                case Piece.Nothing:
-                    break;
-                default:
-                    break;
-            }
-        }
-
         void RenderBoard(Graphics g)
         {
             foreach (var item in Instance.board)
             {
-                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1));
+                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1),new Point(100,100),spriteSheet,new Point(100,100));
             }
             return;
         }
