@@ -55,7 +55,6 @@ namespace ChessFromScratch
         private void promotion_MouseDown(object sender, MouseEventArgs e)
         {
             int x = e.X / 128;
-            int y = e.Y / 128;
 
             switch (x)
             {
@@ -228,7 +227,6 @@ namespace ChessFromScratch
             int y = e.Y / 128;
 
             RenderTooltip(new Point(x, y));
-            Console.WriteLine(x + 1);
         }
     }
 }
