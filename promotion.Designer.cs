@@ -43,6 +43,7 @@
             this.ShowInTaskbar = false;
             this.Text = "promotion";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.promotion_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.promotion_Paint);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.promotion_MouseDown);
             this.ResumeLayout(false);

@@ -86,11 +86,13 @@ namespace ChessFromScratch
 
         void RenderPotentialMove(Graphics g)
         {
+            bool ismove = false;
             using (Brush b = new SolidBrush(
                 Color.FromArgb(128, Color.Lime)))
             {
                 foreach (Point move in gamedata.potentialmoves)
                 {
+                    ismove = true;
                     int x = (move.X - 1) * 100;
                     int y = (move.Y - 1) * 100;
 
@@ -101,6 +103,10 @@ namespace ChessFromScratch
                         50,
                         50);
                 }
+            }
+            if (ismove)
+            {
+                g.DrawString("ESC to cancel", new Font("Arial", 24), Brushes.Cyan, new PointF(0, 0));
             }
         }
 
@@ -500,6 +506,7 @@ namespace ChessFromScratch
             if ((GetAsyncKeyState((int)Keys.Escape) & 0x8000) != 0)
             {
                 gamedata.CurrentSelectedPiece = default;
+                gamedata.potentialmoves.Clear();
                 panel1.Invalidate();
                 boardcache = null;
             }
