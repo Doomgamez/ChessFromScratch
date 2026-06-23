@@ -74,16 +74,15 @@ namespace ChessNet
                 {
                     a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
                     helper.PingHandler(a);
+                    ReturnFunc_h(a);
                 }
                 catch (JsonException ex)
                 {
                     Logger_h("invalid packet " + ex.Message);
                 }finally
                 {
-
+                    ReturnFunc_h(null);
                 }
-
-                ReturnFunc_h(a);
             }
     }
     public class Server
@@ -145,16 +144,15 @@ namespace ChessNet
                     {
                         a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
                         helper.PingHandler(a);
+                        ReturnFunc_h(a);
                     }
                     catch (JsonException ex)
                     {
                         Logger_h("invalid packet " + ex.Message);
                     }finally
                     {
-
+                        ReturnFunc_h(null);
                     }
-
-                    ReturnFunc_h(a);
                 }
             }
         }
