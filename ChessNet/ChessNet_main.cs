@@ -31,14 +31,12 @@ namespace ChessNet
             if (Logger_h == null)
             {
                 throw new NullReferenceException("Logger_h() is undefined");
-                return;
             }
 
             if (ReturnFunc_h == null)
             {
                 Logger_h("ReturnFunc_h() is undefined");
                 throw new NullReferenceException("ReturnFunc_h() is undefined");
-                return;
             }
 
             _client = new TcpClient(AddressFamily.InterNetworkV6);
@@ -63,7 +61,7 @@ namespace ChessNet
 
                 helper.IsConnected(client, stream);
 
-                Packet a = new Packet();
+                Packet a;
 
                 try
                 {
@@ -98,14 +96,12 @@ namespace ChessNet
             if (Logger_h == null)
             {
                 throw new NullReferenceException("Logger_h() is undefined");
-                return;
             }
 
             if (ReturnFunc_h == null)
             {
                 Logger_h("ReturnFunc_h() is undefined");
                 throw new NullReferenceException("ReturnFunc_h() is undefined");
-                return;
             }
 
             listener = new TcpListener(IPAddress.IPv6Any, 36992); //unassigned as of 23/06/2026
@@ -132,7 +128,7 @@ namespace ChessNet
 
                     int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
 
-                    Packet a = new Packet();
+                    Packet a;
 
                     try
                     {
