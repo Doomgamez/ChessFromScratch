@@ -73,6 +73,7 @@ namespace ChessNet
                 try
                 {
                     a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+                    helper.PingHandler(a);
                 }
                 catch (JsonException ex)
                 {
@@ -82,9 +83,7 @@ namespace ChessNet
 
                 }
 
-                helper.PingHandler(a);
-
-                ReturnFunc_h?.Invoke(a);
+                ReturnFunc_h(a);
             }
     }
     public class Server
@@ -145,6 +144,7 @@ namespace ChessNet
                     try
                     {
                         a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+                        helper.PingHandler(a);
                     }
                     catch (JsonException ex)
                     {
@@ -153,8 +153,6 @@ namespace ChessNet
                     {
 
                     }
-
-                    helper.PingHandler(a);
 
                     ReturnFunc_h(a);
                 }
