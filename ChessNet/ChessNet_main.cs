@@ -50,7 +50,7 @@ namespace ChessNet
         {
             NetworkStream stream = client.GetStream();
 
-            byte[] buffer = new byte[4096];
+            byte[] buffer = new byte[512];
 
             while (client.Connected)
             {
@@ -120,7 +120,7 @@ namespace ChessNet
         {
             NetworkStream stream = client.GetStream();
 
-            byte[] buffer = new byte[4096];
+            byte[] buffer = new byte[512];
 
                 while (true)
                 {
