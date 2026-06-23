@@ -68,7 +68,7 @@ namespace ChessNet
                         0,
                         bytesRead);
 
-                Packet a;
+                Packet a = new Packet();
 
                 try
                 {
@@ -140,7 +140,7 @@ namespace ChessNet
 
                     int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
 
-                    Packet a;
+                    Packet a = new Packet();
 
                     try
                     {
