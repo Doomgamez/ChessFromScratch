@@ -73,15 +73,18 @@ namespace ChessNet
                 try
                 {
                     a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+                    if (a == null) { throw new JsonException(); }
                     helper.PingHandler(a);
                     ReturnFunc_h(a);
                 }
                 catch (JsonException ex)
                 {
                     Logger_h("invalid packet " + ex.Message);
-                }finally
-                {
                     ReturnFunc_h(null);
+                }
+                finally
+                {
+
                 }
             }
     }
@@ -143,15 +146,18 @@ namespace ChessNet
                     try
                     {
                         a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+                        if (a == null) { throw new JsonException(); }
                         helper.PingHandler(a);
                         ReturnFunc_h(a);
                     }
                     catch (JsonException ex)
                     {
                         Logger_h("invalid packet " + ex.Message);
-                    }finally
-                    {
                         ReturnFunc_h(null);
+                    }
+                    finally
+                    {
+
                     }
                 }
             }
