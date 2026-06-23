@@ -63,11 +63,6 @@ namespace ChessNet
 
                 helper.IsConnected(client, stream);
 
-                string json = Encoding.UTF8.GetString(
-                        buffer,
-                        0,
-                        bytesRead);
-
                 Packet a = new Packet();
 
                 try
@@ -81,10 +76,6 @@ namespace ChessNet
                 {
                     Logger_h("invalid packet " + ex.Message);
                     ReturnFunc_h(null);
-                }
-                finally
-                {
-
                 }
             }
     }
@@ -154,10 +145,6 @@ namespace ChessNet
                     {
                         Logger_h("invalid packet " + ex.Message);
                         ReturnFunc_h(null);
-                    }
-                    finally
-                    {
-
                     }
                 }
             }
