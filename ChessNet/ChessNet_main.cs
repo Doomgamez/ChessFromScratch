@@ -77,7 +77,6 @@ namespace ChessNet
                 catch (JsonException ex)
                 {
                     Logger_h("invalid packet " + ex.Message);
-                    throw ex;
                 }finally
                 {
 
@@ -150,7 +149,6 @@ namespace ChessNet
                     catch (JsonException ex)
                     {
                         Logger_h("invalid packet " + ex.Message);
-                        throw ex;
                     }finally
                     {
 
