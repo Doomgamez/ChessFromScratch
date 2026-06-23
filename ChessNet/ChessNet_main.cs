@@ -77,7 +77,10 @@ namespace ChessNet
                 catch (JsonException ex)
                 {
                     Logger_h("invalid packet " + ex.Message);
-                    throw;
+                    throw ex;
+                }finally
+                {
+
                 }
 
                 helper.PingHandler(a);
@@ -147,7 +150,10 @@ namespace ChessNet
                     catch (JsonException ex)
                     {
                         Logger_h("invalid packet " + ex.Message);
-                        throw;
+                        throw ex;
+                    }finally
+                    {
+
                     }
 
                     helper.PingHandler(a);
