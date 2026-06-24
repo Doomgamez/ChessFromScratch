@@ -70,7 +70,9 @@ namespace ChessNet
                     a = JsonConvert.DeserializeObject<Packet>(line);
 
                     if (a == null)
+                    {
                         throw new JsonException();
+                    }
 
                     helper.PingHandler(a);
                     ReturnFunc_h(a);
@@ -145,7 +147,9 @@ namespace ChessNet
                     a = JsonConvert.DeserializeObject<Packet>(line);
 
                     if (a == null)
+                    {
                         throw new JsonException();
+                    }
 
                     helper.PingHandler(a);
                     ReturnFunc_h(a);
