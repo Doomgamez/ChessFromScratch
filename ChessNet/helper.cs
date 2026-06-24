@@ -19,9 +19,9 @@ namespace ChessNet
         {
             string json = JsonConvert.SerializeObject(packet);
 
-            byte[] data = Encoding.UTF8.GetBytes(json);
+            byte[] data = Encoding.UTF8.GetBytes(json + "\r\n");
 
-            client.GetStream().WriteAsync(data, 0, data.Length);
+            client.GetStream().Write(data, 0, data.Length);
         }
 
         public static void PingHandler(Packet a)

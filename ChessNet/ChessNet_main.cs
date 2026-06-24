@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
@@ -49,15 +50,16 @@ namespace ChessNet
         private async Task HandleClient(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
-
-            byte[] buffer = new byte[512];
+            StreamReader reader = new StreamReader(stream);
 
             while (client.Connected)
             {
-                int bytesRead = await stream.ReadAsync(
-                    buffer,
-                    0,
-                    buffer.Length);
+                string line = await reader.ReadLineAsync();
+
+                if (line == null)
+                {
+                    break;
+                }
 
                 helper.IsConnected(client, stream);
 
@@ -65,8 +67,11 @@ namespace ChessNet
 
                 try
                 {
-                    a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
-                    if (a == null) { throw new JsonException(); }
+                    a = JsonConvert.DeserializeObject<Packet>(line);
+
+                    if (a == null)
+                        throw new JsonException();
+
                     helper.PingHandler(a);
                     ReturnFunc_h(a);
                 }
@@ -76,6 +81,7 @@ namespace ChessNet
                     ReturnFunc_h(null);
                 }
             }
+        }
     }
     public class Server
     {
@@ -119,29 +125,35 @@ namespace ChessNet
         private async Task HandleServer(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
+            StreamReader reader = new StreamReader(stream);
 
-            byte[] buffer = new byte[512];
+            while (true)
+            {
+                helper.IsConnected(client, stream);
 
-                while (true)
+                string line = await reader.ReadLineAsync();
+
+                if (line == null)
                 {
-                    helper.IsConnected(client, stream);
+                    break;
+                }
 
-                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                Packet a;
 
-                    Packet a;
+                try
+                {
+                    a = JsonConvert.DeserializeObject<Packet>(line);
 
-                    try
-                    {
-                        a = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRead));
-                        if (a == null) { throw new JsonException(); }
-                        helper.PingHandler(a);
-                        ReturnFunc_h(a);
-                    }
-                    catch (JsonException ex)
-                    {
-                        Logger_h("invalid packet " + ex.Message);
-                        ReturnFunc_h(null);
-                    }
+                    if (a == null)
+                        throw new JsonException();
+
+                    helper.PingHandler(a);
+                    ReturnFunc_h(a);
+                }
+                catch (JsonException ex)
+                {
+                    Logger_h("invalid packet " + ex.Message);
+                    ReturnFunc_h(null);
                 }
             }
         }
