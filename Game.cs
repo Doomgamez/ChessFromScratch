@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using ChessNet;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ChessFromScratch.Helpers;
-using ChessNet;
 
 namespace ChessFromScratch
 {
@@ -166,7 +159,7 @@ namespace ChessFromScratch
                     {
                         if (position.Y == 7)
                         {
-                            if (GetPieceByCell(new Point(position.X,5)) == default)
+                            if (GetPieceByCell(new Point(position.X, 5)) == default)
                             {
                                 TryAddPotentialMove(new Point(position.X, 5));
                             }
@@ -253,7 +246,7 @@ namespace ChessFromScratch
             {
                 return;
             }
-            chessTip.SetToolTip(panel1, Enum.GetName(typeof(Piece), value).Replace("W_","White ").Replace("B_","Black "));
+            chessTip.SetToolTip(panel1, Enum.GetName(typeof(Piece), value).Replace("W_", "White ").Replace("B_", "Black "));
             return;
         }
 
@@ -261,7 +254,7 @@ namespace ChessFromScratch
         {
             foreach (var item in Board.Instance.board)
             {
-                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1),new Point(100,100),spriteSheet,new Point(100,100));
+                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1), new Point(100, 100), spriteSheet, new Point(100, 100));
             }
             return;
         }
@@ -295,7 +288,7 @@ namespace ChessFromScratch
                 0,
                 0);
         }
-        
+
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {

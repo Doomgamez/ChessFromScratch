@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChessNet
-{ 
+{
     public class Move
     {
         public Point From { get; set; }
@@ -27,7 +22,7 @@ namespace ChessNet
     {
         public const ushort ProtocolVersion = 1;
         public uint timeelapsed { get; set; }
-        public Move move {get;set;}
+        public Move move { get; set; }
         public PacketType packettype { get; set; }
         public string message { get; set; }
         public HostType hosttype { get; set; } //client; host if client fakes being host game is dced

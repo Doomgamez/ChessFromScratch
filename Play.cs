@@ -1,14 +1,8 @@
 ﻿using ChessNet;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ChessFromScratch
@@ -29,13 +23,13 @@ namespace ChessFromScratch
         private void Play_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            for (int i = 0; i < 1000; i=i+10)
+            for (int i = 0; i < 1000; i = i + 10)
             {
-                g.DrawLine(Pens.Black, 0, 0, Width, Height-i);
+                g.DrawLine(Pens.Black, 0, 0, Width, Height - i);
             }
             for (int i = 0; i < 1000; i = i + 10)
             {
-                g.DrawLine(Pens.DarkGray, 0, 0, Width-i, Height);
+                g.DrawLine(Pens.DarkGray, 0, 0, Width - i, Height);
             }
             g.DrawString("Chess From Scratch", new Font("Arial", 24), Brushes.Black, new PointF(Width / 2 - 150, Height / 2 - 50));
         }
@@ -87,7 +81,7 @@ namespace ChessFromScratch
                     }
                 }
                 structs.ipv6 = box.input;
-                
+
                 Game game = new Game(structs);
 
                 this.Hide();

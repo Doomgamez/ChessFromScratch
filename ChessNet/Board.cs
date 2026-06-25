@@ -15,7 +15,7 @@ namespace ChessNet
             { new Point(6,1), Piece.W_Bishop },
             { new Point(7,1), Piece.W_Knight },
             { new Point(8,1), Piece.W_Rook },
-        
+
             { new Point(1,2), Piece.W_Pawn },
             { new Point(2,2), Piece.W_Pawn },
             { new Point(3,2), Piece.W_Pawn },
@@ -24,7 +24,7 @@ namespace ChessNet
             { new Point(6,2), Piece.W_Pawn },
             { new Point(7,2), Piece.W_Pawn },
             { new Point(8,2), Piece.W_Pawn },
-        
+
             { new Point(1,7), Piece.B_Pawn },
             { new Point(2,7), Piece.B_Pawn },
             { new Point(3,7), Piece.B_Pawn },
@@ -33,7 +33,7 @@ namespace ChessNet
             { new Point(6,7), Piece.B_Pawn },
             { new Point(7,7), Piece.B_Pawn },
             { new Point(8,7), Piece.B_Pawn },
-        
+
             { new Point(1,8), Piece.B_Rook },
             { new Point(2,8), Piece.B_Knight },
             { new Point(3,8), Piece.B_Bishop },
@@ -54,7 +54,7 @@ namespace ChessNet
             { new Point(6,1), Piece.B_Bishop },
             { new Point(7,1), Piece.B_Knight },
             { new Point(8,1), Piece.B_Rook },
-                                    
+
             { new Point(1,2), Piece.B_Pawn },
             { new Point(2,2), Piece.B_Pawn },
             { new Point(3,2), Piece.B_Pawn },

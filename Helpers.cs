@@ -1,10 +1,6 @@
 ﻿using ChessNet;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChessFromScratch
 {
@@ -37,7 +33,7 @@ namespace ChessFromScratch
             Game.gamedata.potentialmoves.Add(position);
         }
 
-        public static void DrawPiece(Graphics g, Piece piece, Point point, Point scale,Image spritesheet,Point Outputscale)
+        public static void DrawPiece(Graphics g, Piece piece, Point point, Point scale, Image spritesheet, Point Outputscale)
         {
             switch (piece)
             {
