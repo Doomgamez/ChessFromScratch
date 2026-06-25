@@ -1,6 +1,6 @@
 ﻿namespace ChessFromScratch
 {
-    partial class promotion
+    partial class Promotion
     {
         /// <summary>
         /// Required designer variable.
@@ -36,11 +36,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 128);
             this.ControlBox = false;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "promotion";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "promotion";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.promotion_Load);

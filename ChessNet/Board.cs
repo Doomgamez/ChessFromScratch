@@ -1,56 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChessFromScratch
+namespace ChessNet
 {
-    public class Game_t
-    {
-        public enum matchtype
-        {
-            Bot,
-            Multiplayer
-        };
-        public enum PlayerColor
-        {
-            White,
-            Black
-        };
-        public enum HostType
-        {
-            Host,
-            Client
-        };
-        public enum GameState
-        {
-            WaitingForOpponent,
-            Playing,
-            GameOver
-        };
-    }
-
     public class Board
     {
-        public enum Piece
-        {
-            Nothing,
-            W_King,
-            W_Queen,
-            W_Rook,
-            W_Bishop,
-            W_Knight,
-            W_Pawn,
-            B_King,
-            B_Queen,
-            B_Rook,
-            B_Bishop,
-            B_Knight,
-            B_Pawn
-        };
-
         public static readonly Dictionary<Point, Piece> Defboard = new Dictionary<Point, Piece>()
         {
             { new Point(1,1), Piece.W_Rook },
@@ -131,45 +85,6 @@ namespace ChessFromScratch
 
         public static Board Instance { get; } = new Board();
 
-        public void MovePiece(Piece piece,Point from,Point to)
-        {
-
-        }
-        public void PromotePiece(Point Cell,Piece PromoteTo)
-        {
-            if (Helpers.GetPieceByCell(Cell) != Piece.W_Pawn && Helpers.GetPieceByCell(Cell) != Piece.B_Pawn)
-            {
-                Environment.Exit(1);
-            }
-            
-            if (Game.gamedata.playerColor != Helpers.WhatPlayerColorIsPiece(PromoteTo))
-            {
-                Environment.Exit(1);
-            }
-
-            board[Cell] = PromoteTo;
-        }
         public Dictionary<Point, Piece> board = new Dictionary<Point, Piece>();
-    }
-
-    public static class Client
-    {
-        public static bool HideMyIp = false; //client side streamer mode
-
-        public static void LoadMyConfig()
-        {
-            return;
-        }
-    }
-
-    public class Data
-    {
-        public Game_t.matchtype matchtype { get; set; }
-        public Game_t.HostType hostType { get; set; }
-        public Game_t.PlayerColor playerColor { get; set; }
-        public string ipv6 { get; set; } = string.Empty;
-        public Game_t.PlayerColor CurrentTurn { get; set; } = Game_t.PlayerColor.White;
-        public (Point, Board.Piece) CurrentSelectedPiece { get; set; }
-        public List<Point> potentialmoves { get; set; } = new List<Point>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessNet;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,17 +9,17 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ChessFromScratch.Board;
 using static ChessFromScratch.Helpers;
 
 namespace ChessFromScratch
 {
-    public partial class promotion : Form
+    public partial class Promotion : Form
     {
         private Image spriteSheet;
         private ToolTip promotiontip = new ToolTip();
         private Point CellToReplace;
-        public promotion(Point Cell)
+
+        public Promotion(Point Cell)
         {
             CellToReplace = Cell;
             InitializeComponent();
@@ -32,14 +33,14 @@ namespace ChessFromScratch
             g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
-            if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+            if (Game.gamedata.playerColor == PlayerColor.White)
             {
                 DrawPiece(g, Piece.W_Rook, new Point(0, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
                 DrawPiece(g, Piece.W_Knight, new Point(1, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
                 DrawPiece(g, Piece.W_Bishop, new Point(2, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
                 DrawPiece(g, Piece.W_Queen, new Point(3, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
             }
-            else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+            else if (Game.gamedata.playerColor == PlayerColor.Black)
             {
                 DrawPiece(g, Piece.B_Rook, new Point(0, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
                 DrawPiece(g, Piece.B_Knight, new Point(1, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
@@ -60,13 +61,13 @@ namespace ChessFromScratch
             {
                 case 0:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.W_Rook);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.W_Rook);
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.B_Rook);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.B_Rook);
                         }
                         else
                         {
@@ -78,13 +79,13 @@ namespace ChessFromScratch
                     break;
                 case 1:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.W_Knight);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.W_Knight);
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.B_Knight);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.B_Knight);
                         }
                         else
                         {
@@ -96,13 +97,13 @@ namespace ChessFromScratch
                     break;
                 case 2:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.W_Bishop);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.W_Bishop);
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.B_Bishop);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.B_Bishop);
                         }
                         else
                         {
@@ -114,13 +115,13 @@ namespace ChessFromScratch
                     break;
                 case 3:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.W_Queen);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.W_Queen);
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
-                            Instance.PromotePiece(CellToReplace, Piece.B_Queen);
+                            Board.Instance.PromotePiece(CellToReplace, Piece.B_Queen);
                         }
                         else
                         {
@@ -147,17 +148,17 @@ namespace ChessFromScratch
             }
         }
 
-        void RenderTooltip(Point loc)
+        private void RenderTooltip(Point loc)
         {
             switch (loc.X)
             {
                 case 0:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
                             promotiontip.SetToolTip(this, "White Rook");
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
                             promotiontip.SetToolTip(this, "Black Rook");
                         }
@@ -169,11 +170,11 @@ namespace ChessFromScratch
                     break;
                 case 1:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
                             promotiontip.SetToolTip(this, "White Knight");
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
                             promotiontip.SetToolTip(this, "Black Knight");
                         }
@@ -185,11 +186,11 @@ namespace ChessFromScratch
                     break;
                 case 2:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
                             promotiontip.SetToolTip(this, "White Bishop");
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
                             promotiontip.SetToolTip(this, "Black Bishop");
                         }
@@ -201,11 +202,11 @@ namespace ChessFromScratch
                     break;
                 case 3:
                     {
-                        if (Game.gamedata.playerColor == Game_t.PlayerColor.White)
+                        if (Game.gamedata.playerColor == PlayerColor.White)
                         {
                             promotiontip.SetToolTip(this, "White Queen");
                         }
-                        else if (Game.gamedata.playerColor == Game_t.PlayerColor.Black)
+                        else if (Game.gamedata.playerColor == PlayerColor.Black)
                         {
                             promotiontip.SetToolTip(this, "Black Queen");
                         }
