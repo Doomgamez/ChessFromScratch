@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="ChessFromScratch.csproj" Id="31fb56bf-3d34-4e9d-9272-3121d2884e6e" />
+  <Project Path="ChessFromScratch/ChessFromScratch.csproj" Id="31fb56bf-3d34-4e9d-9272-3121d2884e6e" />
   <Project Path="ChessNet/ChessNet.csproj" Id="80b9e7f9-b480-4c5f-91e8-60332cfe88f7" />
 </Solution>

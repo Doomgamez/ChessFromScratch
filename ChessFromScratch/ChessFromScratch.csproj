@@ -98,6 +98,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -114,16 +115,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="emb\manual.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="emb\spritesheetchess.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="emb\doomgames.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="ChessNet\ChessNet.csproj">
+    <ProjectReference Include="..\ChessNet\ChessNet.csproj">
       <Project>{80b9e7f9-b480-4c5f-91e8-60332cfe88f7}</Project>
       <Name>ChessNet</Name>
     </ProjectReference>
