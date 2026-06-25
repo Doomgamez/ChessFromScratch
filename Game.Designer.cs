@@ -28,12 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.leave = new System.Windows.Forms.Button();
             this.manual = new System.Windows.Forms.Button();
-            this.KeyInput = new System.Windows.Forms.Timer(this.components);
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,12 +75,6 @@
             this.manual.UseVisualStyleBackColor = true;
             this.manual.Click += new System.EventHandler(this.manual_Click);
             // 
-            // KeyInput
-            // 
-            this.KeyInput.Enabled = true;
-            this.KeyInput.Interval = 50;
-            this.KeyInput.Tick += new System.EventHandler(this.KeyInput_Tick);
-            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -90,11 +82,13 @@
             this.ClientSize = new System.Drawing.Size(1000, 800);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.KeyPreview = true;
             this.Name = "Game";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Game_KeyDown);
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -106,7 +100,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button manual;
         private System.Windows.Forms.Button leave;
-        private System.Windows.Forms.Timer KeyInput;
     }
 }
 

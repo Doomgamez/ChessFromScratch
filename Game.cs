@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using ChessNet;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ChessFromScratch.Board;
 using static ChessFromScratch.Helpers;
 
 namespace ChessFromScratch
 {
     public partial class Game : Form
     {
-        [DllImport("user32.dll")]
-        public static extern short GetAsyncKeyState(int vKey);
-
         public static Data gamedata;
         private Bitmap bgimgcache;
         private Bitmap boardcache;
-
         private Image spriteSheet;
-
-        private ToolTip chessTip = new ToolTip();
+        private readonly ToolTip chessTip = new ToolTip();
 
         public Game(Data gamestruct)
         {
@@ -41,7 +29,7 @@ namespace ChessFromScratch
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var asm = Assembly.GetExecutingAssembly();
+            Assembly asm = Assembly.GetExecutingAssembly();
 
             using (var stream = asm.GetManifestResourceStream(
                 "ChessFromScratch.emb.spritesheetchess.png"))
@@ -49,19 +37,20 @@ namespace ChessFromScratch
                 spriteSheet = Image.FromStream(stream);
             }
 
-            if (gamedata.playerColor == Game_t.PlayerColor.Black)
+            if (gamedata.playerColor == PlayerColor.Black)
             {
-                Instance.board = Defboard;
-            }else
+                Board.Instance.board = Board.Defboard;
+            }
+            else
             {
-                Instance.board = DefboardWhite;
+                Board.Instance.board = Board.DefboardWhite;
             }
 
             Console.WriteLine(gamedata.playerColor); // yes it is random just not enough
 
         }
 
-        void DrawLayout(Graphics g)
+        private void DrawLayout(Graphics g)
         {
             for (float x = 0; x <= panel1.Width; x += 100)
             {
@@ -84,7 +73,7 @@ namespace ChessFromScratch
             }
         }
 
-        void RenderPotentialMove(Graphics g)
+        private void RenderPotentialMove(Graphics g)
         {
             bool ismove = false;
             using (Brush b = new SolidBrush(
@@ -110,7 +99,7 @@ namespace ChessFromScratch
             }
         }
 
-        void ShowPotentialMoves()
+        private void ShowPotentialMoves()
         {
             Piece value;
             gamedata.potentialmoves.Clear();
@@ -144,13 +133,13 @@ namespace ChessFromScratch
                         }
 
                         value = GetPieceByCell(new Point(position.X - 1, position.Y - 1));
-                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
+                        if (WhatPlayerColorIsPiece(value) == PlayerColor.Black)
                         {
                             TryAddPotentialMove(new Point(position.X - 1, position.Y - 1));
                         }
 
                         value = GetPieceByCell(new Point(position.X + 1, position.Y - 1));
-                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.Black)
+                        if (WhatPlayerColorIsPiece(value) == PlayerColor.Black)
                         {
                             TryAddPotentialMove(new Point(position.X + 1, position.Y - 1));
                         }
@@ -170,7 +159,7 @@ namespace ChessFromScratch
                     {
                         if (position.Y == 7)
                         {
-                            if (GetPieceByCell(new Point(position.X,5)) == default)
+                            if (GetPieceByCell(new Point(position.X, 5)) == default)
                             {
                                 TryAddPotentialMove(new Point(position.X, 5));
                             }
@@ -182,13 +171,13 @@ namespace ChessFromScratch
                         }
 
                         value = GetPieceByCell(new Point(position.X - 1, position.Y - 1));
-                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+                        if (WhatPlayerColorIsPiece(value) == PlayerColor.White)
                         {
                             TryAddPotentialMove(new Point(position.X - 1, position.Y - 1));
                         }
 
                         value = GetPieceByCell(new Point(position.X + 1, position.Y - 1));
-                        if (WhatPlayerColorIsPiece(value) == Game_t.PlayerColor.White)
+                        if (WhatPlayerColorIsPiece(value) == PlayerColor.White)
                         {
                             TryAddPotentialMove(new Point(position.X + 1, position.Y - 1));
                         }
@@ -201,7 +190,7 @@ namespace ChessFromScratch
             }
         }
 
-        void PotentialMoveClicked(Point target)
+        private void PotentialMoveClicked(Point target)
         {
             if (!gamedata.potentialmoves.Contains(target))
                 return;
@@ -209,9 +198,9 @@ namespace ChessFromScratch
             Point from = gamedata.CurrentSelectedPiece.Item1;
             Piece piece = gamedata.CurrentSelectedPiece.Item2;
 
-            Instance.board.Remove(from);
+            Board.Instance.board.Remove(from);
 
-            Instance.board[target] = piece;
+            Board.Instance.board[target] = piece;
 
             gamedata.CurrentSelectedPiece = default;
             gamedata.potentialmoves.Clear();
@@ -223,17 +212,17 @@ namespace ChessFromScratch
             {
                 if (target.Y == 1)
                 {
-                    promotion pr = new promotion(target);
-                    pr.ShowDialog();
+                    Promotion pr = new Promotion(target);
+                    pr.ShowDialog(this);
                 }
             }
 
             panel1.Invalidate();
         }
 
-        void SelectPieceToMove(Point p)
+        private void SelectPieceToMove(Point p)
         {
-            if (!Instance.board.TryGetValue(p, out Piece value))
+            if (!Board.Instance.board.TryGetValue(p, out Piece value))
             {
                 return;
             }
@@ -251,21 +240,21 @@ namespace ChessFromScratch
             return;
         }
 
-        void RenderTooltip(Point loc)
+        private void RenderTooltip(Point loc)
         {
             if (!Board.Instance.board.TryGetValue(loc, out Piece value))
             {
                 return;
             }
-            chessTip.SetToolTip(panel1, Enum.GetName(typeof(Piece), value).Replace("W_","White ").Replace("B_","Black "));
+            chessTip.SetToolTip(panel1, Enum.GetName(typeof(Piece), value).Replace("W_", "White ").Replace("B_", "Black "));
             return;
         }
 
-        void RenderBoard(Graphics g)
+        private void RenderBoard(Graphics g)
         {
-            foreach (var item in Instance.board)
+            foreach (var item in Board.Instance.board)
             {
-                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1),new Point(100,100),spriteSheet,new Point(100,100));
+                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1), new Point(100, 100), spriteSheet, new Point(100, 100));
             }
             return;
         }
@@ -299,7 +288,7 @@ namespace ChessFromScratch
                 0,
                 0);
         }
-        
+
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
@@ -406,9 +395,9 @@ namespace ChessFromScratch
             SelectPieceToMove(clicked);
         }
 
-        private void KeyInput_Tick(object sender, EventArgs e)
+        private void Game_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((GetAsyncKeyState((int)Keys.Escape) & 0x8000) != 0)
+            if (e.KeyCode == Keys.Escape)
             {
                 gamedata.CurrentSelectedPiece = default;
                 gamedata.potentialmoves.Clear();

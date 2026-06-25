@@ -34,23 +34,24 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\ChessFromScratch\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChessNet_main.cs" />
+    <Compile Include="Board.cs" />
     <Compile Include="Data.cs" />
-    <Compile Include="helper.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="HostType.cs" />
+    <Compile Include="MatchType.cs" />
+    <Compile Include="Piece.cs" />
+    <Compile Include="PlayerColor.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
