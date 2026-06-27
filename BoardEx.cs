@@ -15,12 +15,12 @@ namespace ChessFromScratch
         {
             if (Helpers.GetPieceByCell(Cell) != Piece.W_Pawn && Helpers.GetPieceByCell(Cell) != Piece.B_Pawn)
             {
-                Environment.Exit(1);
+                ChessNet.Helper.Disconnect();
             }
 
             if (Game.gamedata.playerColor != Helpers.WhatPlayerColorIsPiece(PromoteTo))
             {
-                Environment.Exit(1);
+                ChessNet.Helper.Disconnect();
             }
 
             b.board[Cell] = PromoteTo;

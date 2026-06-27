@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChessNet
@@ -11,10 +12,13 @@ namespace ChessNet
     {
         public static Action<Packet> ReturnFunc_h = null;
         public static Action<string> Logger_h = null;
-        private TcpListener listener;
+        public static Task Handler;
+        public static CancellationTokenSource cts;
         public void SetUpClassHandler(Action<Packet> ReturnFunc)
         {
             ReturnFunc_h = ReturnFunc;
+            cts = new CancellationTokenSource();
+            Handler = HandleServer(cts.Token);
         }
 
         public void SetUpLogger(Action<string> log)
@@ -34,27 +38,27 @@ namespace ChessNet
                 throw new NullReferenceException("ReturnFunc_h() is undefined");
             }
 
-            listener = new TcpListener(IPAddress.IPv6Any, 36992); //unassigned as of 23/06/2026
-            listener.Start();
+            Player.listener = new TcpListener(IPAddress.IPv6Any, 36992); //unassigned as of 23/06/2026
+            Player.listener.Start();
 
-            Logger_h(listener.LocalEndpoint.ToString());
+            Logger_h(Player.listener.LocalEndpoint.ToString());
 
             while (true)
             {
-                TcpClient client = await listener.AcceptTcpClientAsync();
-                _ = HandleServer(client);
+                Player.client = await Player.listener.AcceptTcpClientAsync();
+                _ = HandleServer(cts.Token);
             }
         }
 
-        private async Task HandleServer(TcpClient client)
+        private async Task HandleServer(CancellationToken cts)
         {
-            NetworkStream stream = client.GetStream();
-            BinaryReader reader = new BinaryReader(stream, Encoding.UTF8);
-            BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8);
+            Player.ns = Player.client.GetStream();
+            BinaryReader reader = new BinaryReader(Player.ns, Encoding.UTF8);
+            BinaryWriter writer = new BinaryWriter(Player.ns, Encoding.UTF8);
 
-            while (true)
+            while (!cts.IsCancellationRequested)
             {
-                Helper.IsConnected(client, writer);
+                Helper.IsConnected(Player.client, writer);
                 try
                 {
                     Packet packet = Packet.Read(reader);

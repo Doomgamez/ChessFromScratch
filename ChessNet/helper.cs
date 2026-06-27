@@ -18,13 +18,18 @@ namespace ChessNet
             return;
         }
 
+        public static void Disconnect()
+        {
+            Player.client.Close();
+            Player.ns.Close();
+            Client.cts.Cancel();
+        }
+
         public static void IsConnected(TcpClient client, BinaryWriter writer)
         {
             if (DateTime.UtcNow - lastping > TimeSpan.FromSeconds(60))
             {
-                // TODO: Close the reader, writer, etc
-                //       do this outside of this, in the client/server class
-                client.Close();
+                Disconnect();
             }
             else if (DateTime.UtcNow - lastping > TimeSpan.FromSeconds(3)) //garbage piece of shit every 3 seconds if no ping was done sends a packet with a second delay to make sure the clients still are connected
             {
@@ -35,6 +40,14 @@ namespace ChessNet
                     lastpingsent = DateTime.UtcNow;
                 }
             }
+        }
+
+        public static void CloseServer()
+        {
+            Server.cts.Cancel();
+
+            Player.client.Close();
+            Player.ns.Close();
         }
     }
 }

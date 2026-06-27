@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChessNet
@@ -11,10 +12,14 @@ namespace ChessNet
     {
         public static Action<Packet> ReturnFunc_h = null;
         public static Action<string> Logger_h = null;
-        private TcpClient _client;
+        public static Task Handler;
+        public static CancellationTokenSource cts;
+
         public void SetUpClassHandler(Action<Packet> ReturnFunc)
         {
             ReturnFunc_h = ReturnFunc;
+            cts = new CancellationTokenSource();
+            Handler = HandleClient(cts.Token);
         }
 
         public void SetUpLogger(Action<string> log)
@@ -35,22 +40,22 @@ namespace ChessNet
                 throw new NullReferenceException("ReturnFunc_h() is undefined");
             }
 
-            _client = new TcpClient(AddressFamily.InterNetworkV6);
+            Player.client = new TcpClient(AddressFamily.InterNetworkV6);
 
-            await _client.ConnectAsync(IPAddress.Parse(ip), 36992);
+            await Player.client.ConnectAsync(IPAddress.Parse(ip), 36992);
 
-            _ = HandleClient(_client);
+            _ = HandleClient(cts.Token);
         }
 
-        private async Task HandleClient(TcpClient client)
+        private async Task HandleClient(CancellationToken cts)
         {
-            NetworkStream stream = client.GetStream();
-            BinaryReader reader = new BinaryReader(stream, Encoding.UTF8);
-            BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8);
+            Player.ns = Player.client.GetStream();
+            BinaryReader reader = new BinaryReader(Player.ns, Encoding.UTF8);
+            BinaryWriter writer = new BinaryWriter(Player.ns, Encoding.UTF8);
 
-            while (client.Connected)
+            while (Player.client.Connected && !cts.IsCancellationRequested)
             {
-                Helper.IsConnected(client, writer);
+                Helper.IsConnected(Player.client, writer);
                 try
                 {
                     Packet packet = Packet.Read(reader);

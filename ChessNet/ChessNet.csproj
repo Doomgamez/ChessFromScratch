@@ -46,6 +46,7 @@
     <Compile Include="HostType.cs" />
     <Compile Include="MatchType.cs" />
     <Compile Include="Piece.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="PlayerColor.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Client.cs" />
