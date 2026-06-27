@@ -1,4 +1,4 @@
-﻿ChessFromScratch - Ipv6 networking and chess AI DEMO
+ChessFromScratch - Ipv6 networking and chess AI DEMO
 
 license - https://unlicense.org/
 

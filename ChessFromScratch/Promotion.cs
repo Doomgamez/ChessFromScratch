@@ -1,4 +1,5 @@
-﻿using ChessNet;
+﻿using ChessFromScratch.Properties;
+using ChessNet;
 using System;
 using System.Drawing;
 using System.Reflection;
@@ -9,7 +10,6 @@ namespace ChessFromScratch
 {
     public partial class Promotion : Form
     {
-        private Image spriteSheet;
         private ToolTip promotiontip = new ToolTip();
         private Point CellToReplace;
 
@@ -29,17 +29,17 @@ namespace ChessFromScratch
 
             if (Game.gamedata.playerColor == PlayerColor.White)
             {
-                DrawPiece(g, Piece.W_Rook, new Point(0, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
-                DrawPiece(g, Piece.W_Knight, new Point(1, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
-                DrawPiece(g, Piece.W_Bishop, new Point(2, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
-                DrawPiece(g, Piece.W_Queen, new Point(3, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
+                DrawPiece(g, Piece.W_Rook, new Point(0, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
+                DrawPiece(g, Piece.W_Knight, new Point(1, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
+                DrawPiece(g, Piece.W_Bishop, new Point(2, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
+                DrawPiece(g, Piece.W_Queen, new Point(3, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
             }
             else if (Game.gamedata.playerColor == PlayerColor.Black)
             {
-                DrawPiece(g, Piece.B_Rook, new Point(0, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
-                DrawPiece(g, Piece.B_Knight, new Point(1, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
-                DrawPiece(g, Piece.B_Bishop, new Point(2, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
-                DrawPiece(g, Piece.B_Queen, new Point(3, 0), new Point(128, 128), spriteSheet, new Point(128, 128));
+                DrawPiece(g, Piece.B_Rook, new Point(0, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
+                DrawPiece(g, Piece.B_Knight, new Point(1, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
+                DrawPiece(g, Piece.B_Bishop, new Point(2, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
+                DrawPiece(g, Piece.B_Queen, new Point(3, 0), new Point(128, 128), Resources.spritesheetchess, new Point(128, 128));
             }
             else
             {
@@ -129,17 +129,6 @@ namespace ChessFromScratch
                     break;
             }
             return;
-        }
-
-        private void promotion_Load(object sender, EventArgs e)
-        {
-            var asm = Assembly.GetExecutingAssembly();
-
-            using (var stream = asm.GetManifestResourceStream(
-                "ChessFromScratch.emb.spritesheetchess.png"))
-            {
-                spriteSheet = Image.FromStream(stream);
-            }
         }
 
         private void RenderTooltip(Point loc)

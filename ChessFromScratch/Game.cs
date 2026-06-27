@@ -1,4 +1,5 @@
-﻿using ChessNet;
+﻿using ChessFromScratch.Properties;
+using ChessNet;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,7 +15,6 @@ namespace ChessFromScratch
         public static Data gamedata;
         private Bitmap bgimgcache;
         private Bitmap boardcache;
-        private Image spriteSheet;
         private readonly ToolTip chessTip = new ToolTip();
 
         public Game(Data gamestruct)
@@ -29,13 +29,7 @@ namespace ChessFromScratch
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Assembly asm = Assembly.GetExecutingAssembly();
-
-            using (var stream = asm.GetManifestResourceStream(
-                "ChessFromScratch.emb.spritesheetchess.png"))
-            {
-                spriteSheet = Image.FromStream(stream);
-            }
+            
 
             if (gamedata.playerColor == PlayerColor.Black)
             {
@@ -254,7 +248,7 @@ namespace ChessFromScratch
         {
             foreach (var item in Board.Instance.board)
             {
-                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1), new Point(100, 100), spriteSheet, new Point(100, 100));
+                DrawPiece(g, item.Value, new Point(item.Key.X - 1, item.Key.Y - 1), new Point(100, 100), Resources.spritesheetchess, new Point(100, 100));
             }
             return;
         }
@@ -352,19 +346,8 @@ namespace ChessFromScratch
         private void manual_Click(object sender, EventArgs e)
         {
             string tmp = Path.Combine(Path.GetTempPath(), "manual-ChessFromScratch.txt");
-
             if (!File.Exists(tmp))
-            {
-                using (Stream res = Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream("ChessFromScratch.emb.manual.txt"))
-                {
-                    using (FileStream file = File.Create(tmp))
-                    {
-                        res.CopyTo(file);
-                    }
-                }
-            }
-
+                File.WriteAllText(tmp, Resources.manual);
             Process.Start("notepad.exe", tmp);
         }
 
