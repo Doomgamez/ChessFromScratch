@@ -13,6 +13,7 @@ namespace ChessFromScratch
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(true);
+            Logger.starttime = (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             Application.Run(new Play());
         }
     }

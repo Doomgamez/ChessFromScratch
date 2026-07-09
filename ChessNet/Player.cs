@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ChessNet
 {
-    internal class Player
+    public class Player
     {
-        public static TcpListener listener;
-        public static TcpClient client;
-        public static NetworkStream ns;
+        public TcpListener listener;
+        public TcpClient client;
+        public NetworkStream ns;
     }
 }

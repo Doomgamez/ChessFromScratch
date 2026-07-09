@@ -1,4 +1,6 @@
-﻿namespace ChessFromScratch
+﻿using ChessNet;
+
+namespace ChessFromScratch
 {
     public static class ClientData
     {

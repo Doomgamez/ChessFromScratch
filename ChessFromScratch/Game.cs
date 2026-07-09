@@ -29,8 +29,6 @@ namespace ChessFromScratch
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-
             if (gamedata.playerColor == PlayerColor.Black)
             {
                 Board.Instance.board = Board.Defboard;
@@ -38,6 +36,22 @@ namespace ChessFromScratch
             else
             {
                 Board.Instance.board = Board.DefboardWhite;
+            }
+
+            if (gamedata.hostType == HostType.Host)
+            {
+                Network.server.DefineGameData(gamedata);
+                Network.server.SetUpClassHandler(ServerHandler.serverhandler.PacketHandler);
+                Network.server.SetUpLogger(Logger.log);
+                Network.server.DefineLostConFunc(ServerHandler.serverhandler.LostConnection);
+                Network.server.StartServer();
+            }else
+            {
+                Network.client.DefineGameData(gamedata);
+                Network.client.SetUpClassHandler(ClientHandler.clienthandler.PacketHandler);
+                Network.client.SetUpLogger(Logger.log);
+                Network.client.DefineLostConFunc(ClientHandler.clienthandler.LostConnection);
+                Network.client.StartClient(gamedata.ipv6);
             }
 
             Console.WriteLine(gamedata.playerColor); // yes it is random just not enough
@@ -340,6 +354,14 @@ namespace ChessFromScratch
                     form.Activate();
                     break;
                 }
+            }
+            if (gamedata.hostType == HostType.Client)
+            {
+                Helper.Disconnect();
+            }
+            else
+            {
+                Helper.CloseServer();
             }
         }
 

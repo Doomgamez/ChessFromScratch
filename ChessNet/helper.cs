@@ -6,8 +6,11 @@ namespace ChessNet
 {
     public class Helper
     {
+        public static Data gamedata;
         public static DateTime lastping;
         public static DateTime lastpingsent = DateTime.UtcNow;
+
+        public static Action LostConnection;
 
         public static void PingHandler(Packet a)
         {
@@ -20,16 +23,31 @@ namespace ChessNet
 
         public static void Disconnect()
         {
-            Player.client.Close();
-            Player.ns.Close();
-            Client.cts.Cancel();
+            if (gamedata.hostType == HostType.Host)
+            {
+                if (Server.instance.client != null)
+                {
+                    Server.instance.client.Close();
+                    Server.instance.ns.Close();
+                }
+            }
+            else
+            {
+                if (Client.instance.client != null)
+                {
+                    Client.instance.client.Close();
+                    Client.instance.ns.Close();
+
+                    Client.cts.Cancel();
+                }
+            }
         }
 
         public static void IsConnected(TcpClient client, BinaryWriter writer)
         {
             if (DateTime.UtcNow - lastping > TimeSpan.FromSeconds(60))
             {
-                Disconnect();
+                LostConnection();
             }
             else if (DateTime.UtcNow - lastping > TimeSpan.FromSeconds(3)) //garbage piece of shit every 3 seconds if no ping was done sends a packet with a second delay to make sure the clients still are connected
             {
@@ -44,10 +62,7 @@ namespace ChessNet
 
         public static void CloseServer()
         {
-            Server.cts.Cancel();
-
-            Player.client.Close();
-            Player.ns.Close();
+            Disconnect();
         }
     }
 }

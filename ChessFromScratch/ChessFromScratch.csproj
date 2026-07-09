@@ -57,6 +57,10 @@
     <Compile Include="InputBox.Designer.cs">
       <DependentUpon>InputBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logger.cs" />
+    <Compile Include="Network.cs" />
+    <Compile Include="packethandling\client\ClientHandler.cs" />
+    <Compile Include="packethandling\server\ServerHandler.cs" />
     <Compile Include="Play.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -14,17 +14,28 @@ namespace ChessNet
         public static Action<string> Logger_h = null;
         public static Task Handler;
         public static CancellationTokenSource cts;
+        public static Player instance = new Player();
         public void SetUpClassHandler(Action<Packet> ReturnFunc)
         {
             ReturnFunc_h = ReturnFunc;
             cts = new CancellationTokenSource();
-            Handler = HandleServer(cts.Token);
         }
 
         public void SetUpLogger(Action<string> log)
         {
             Logger_h = log;
         }
+
+        public void DefineGameData(Data gamedata)
+        {
+            Helper.gamedata = gamedata;
+        }
+
+        public void DefineLostConFunc(Action LostConVoid)
+        {
+            Helper.LostConnection = LostConVoid;
+        }
+
         public async void StartServer()
         {
             if (Logger_h == null)
@@ -38,37 +49,52 @@ namespace ChessNet
                 throw new NullReferenceException("ReturnFunc_h() is undefined");
             }
 
-            Player.listener = new TcpListener(IPAddress.IPv6Any, 36992); //unassigned as of 23/06/2026
-            Player.listener.Start();
+            if (Helper.gamedata == null)
+            {
+                Logger_h("gamedata is undefined");
+                throw new NullReferenceException("gamedata is undefined");
+            }
 
-            Logger_h(Player.listener.LocalEndpoint.ToString());
+            if (Helper.LostConnection == null)
+            {
+                Logger_h("LostConnection() is undefined");
+                throw new NullReferenceException("LostConnection() is undefined");
+            }
+
+            instance.listener = new TcpListener(IPAddress.IPv6Any, 36992); //unassigned as of 23/06/2026
+            instance.listener.Start();
+
+            Logger_h(instance.listener.LocalEndpoint.ToString());
 
             while (true)
             {
-                Player.client = await Player.listener.AcceptTcpClientAsync();
-                _ = HandleServer(cts.Token);
+                TcpClient client = await instance.listener.AcceptTcpClientAsync();
+                _ = HandleServer(client, cts.Token);
             }
         }
 
-        private async Task HandleServer(CancellationToken cts)
+        private async Task HandleServer(TcpClient client, CancellationToken token)
         {
-            Player.ns = Player.client.GetStream();
-            BinaryReader reader = new BinaryReader(Player.ns, Encoding.UTF8);
-            BinaryWriter writer = new BinaryWriter(Player.ns, Encoding.UTF8);
+            NetworkStream ns = client.GetStream();
 
-            while (!cts.IsCancellationRequested)
+            using (BinaryReader reader = new BinaryReader(ns, Encoding.UTF8))
+            using (BinaryWriter writer = new BinaryWriter(ns, Encoding.UTF8))
             {
-                Helper.IsConnected(Player.client, writer);
-                try
+                while (client.Connected && !token.IsCancellationRequested)
                 {
-                    Packet packet = Packet.Read(reader);
-                    Helper.PingHandler(packet);
-                    ReturnFunc_h(packet);
-                }
-                catch (Exception ex)
-                {
-                    Logger_h("invalid packet " + ex.Message);
-                    ReturnFunc_h(null);
+                    Helper.IsConnected(client, writer);
+
+                    try
+                    {
+                        Packet packet = Packet.Read(reader);
+                        Helper.PingHandler(packet);
+                        ReturnFunc_h(packet);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger_h(ex.ToString());
+                        break;
+                    }
                 }
             }
         }
